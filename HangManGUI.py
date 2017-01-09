@@ -2,8 +2,6 @@ import sys
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-import testMod
-
 
 class HangManGUI(QWidget):
 
@@ -17,22 +15,79 @@ class HangManGUI(QWidget):
         self.buttonList = []
         super(HangManGUI, self).__init__()
         
+        self.livesCount = 6
+        
         self.initUI()
         
     def initUI(self):
         
         self.generateLetterButtons()
         
-        self.setGeometry(300, 300, 280, 170)
+        self.setGeometry(300, 300, 600, 450)
         self.setWindowTitle('HangMan')
         self.show()
+        
+    def paintEvent(self, event):
+        qp = QPainter()
+        qp.begin(self)
+        pen = QPen(Qt.black, 3, Qt.SolidLine)
+        qp.setPen(pen)
+        
+        #gallows
+        qp.drawLine(75, 60, 75, 20)
+        qp.drawLine(150, 20, 75, 20)
+        qp.drawLine(150, 20, 150, 200)
+        
+        #head
+        if (self.livesCount < 6):
+            qp.drawEllipse(60, 60, 30, 30)
+        
+        #body
+        if (self.livesCount < 5):
+            qp.drawLine(75, 90, 75, 135)
+        
+        #left arm
+        if (self.livesCount < 4):
+            qp.drawLine(75, 105, 50, 100)
+            
+        #right arm
+        if (self.livesCount < 3):
+            qp.drawLine(75, 105, 100, 100)
+        
+        #left leg
+        if (self.livesCount < 2):
+            qp.drawLine(75, 135, 50, 160)
+            
+        #right leg
+        if (self.livesCount < 1):
+            qp.drawLine(75, 135, 100, 160)
+        
+        
+        # letter lines
+        qp.drawLine(20, 250, 60, 250)
+        qp.drawLine(70, 250, 110, 250)
+        qp.drawLine(120, 250, 160, 250)
+        qp.drawLine(170, 250, 210, 250)
+        qp.drawLine(220, 250, 260, 250)
+        
+        
+
+        qp.end()
+        
+    def drawEllipse(self, event, qp, pen):
+        qp.setPen(pen)
+        qp.drawEllipse(60, 60, 30, 30)
     
     def generateLetterButtons(self): 
         for num in range (0, 26):
              self.buttonList.append(QPushButton(HangManGUI.alphabet[num], self))
-             self.buttonList[num].move(50*(num%5), 40 * (num // 5))
-             self.buttonList[num].clicked.connect(self.onButtonClick(self.buttonList[num]))
+             self.buttonList[num].move(50*(num%9), 300+ (40 * (num // 9)))
+             self.buttonList[num].clicked.connect(self.decrementLives)
              
+    def decrementLives(self):
+        self.livesCount -= 1
+        self.update()
+    
     def onButtonClick(self, button):
         button.setEnabled(False)
  
