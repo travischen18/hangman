@@ -3,6 +3,8 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
+import HangMan
+
 class HangManGUI(QWidget):
 
     alphabet = ['A', 'B', 'C', 'D', 'E',
@@ -15,7 +17,11 @@ class HangManGUI(QWidget):
         self.buttonList = []
         super(HangManGUI, self).__init__()
         
-        self.livesCount = 6
+        ThisGame = HangMan.Game()
+        self.guessedLetters = ThisGame.getCorrectArray()
+        self.word = ThisGame.getWord()
+
+        self.livesCount = ThisGame.getNumLives()
         
         self.initUI()
         
@@ -69,8 +75,20 @@ class HangManGUI(QWidget):
         qp.drawLine(120, 250, 160, 250)
         qp.drawLine(170, 250, 210, 250)
         qp.drawLine(220, 250, 260, 250)
-        
-        
+
+        # Text
+
+        if (self.guessedLetters[0] == 1):
+            qp.drawText(40, 240, self.word[0])
+        if (self.guessedLetters[1] == 1):
+            qp.drawText(90, 240, self.word[1])
+        if (self.guessedLetters[2] == 1):
+            qp.drawText(140, 240, self.word[2])
+        if (self.guessedLetters[3] == 1):
+            qp.drawText(190, 240, self.word[3])
+        if (self.guessedLetters[4] == 1):
+            qp.drawText(240, 240, self.word[4])
+
 
         qp.end()
         
@@ -82,19 +100,16 @@ class HangManGUI(QWidget):
         for num in range (0, 26):
              self.buttonList.append(QPushButton(HangManGUI.alphabet[num], self))
              self.buttonList[num].move(50*(num%9), 300+ (40 * (num // 9)))
-             self.buttonList[num].clicked.connect(self.decrementLives)
+             # self.buttonList[num].clicked.connect(self.decrementLives)
              
-    def decrementLives(self):
-        self.livesCount -= 1
+    
+        
+    def updateGame(self):
         self.update()
     
     def onButtonClick(self, button):
         button.setEnabled(False)
- 
-    def onChanged(self, text):
-        self.lbl.setText(text)
-        self.lbl.adjustSize()
-        testMod.hello()
+
 
 def main():
     app = QApplication(sys.argv)
