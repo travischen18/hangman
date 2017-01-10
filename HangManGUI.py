@@ -17,12 +17,12 @@ class HangManGUI(QWidget):
         self.buttonList = []
         super(HangManGUI, self).__init__()
         
-        ThisGame = HangMan.Game()
-        self.guessedLetters = ThisGame.getCorrectArray()
-        self.word = ThisGame.getWord()
-
-        self.livesCount = ThisGame.getNumLives()
+        self.ThisGame = HangMan.Game()
         
+        self.guessedLetters = self.ThisGame.getCorrectArray()
+        self.word = self.ThisGame.getWord()
+        self.livesCount = self.ThisGame.getNumLives()
+
         self.initUI()
         
     def initUI(self):
@@ -77,7 +77,6 @@ class HangManGUI(QWidget):
         qp.drawLine(220, 250, 260, 250)
 
         # Text
-
         if (self.guessedLetters[0] == 1):
             qp.drawText(40, 240, self.word[0])
         if (self.guessedLetters[1] == 1):
@@ -89,7 +88,6 @@ class HangManGUI(QWidget):
         if (self.guessedLetters[4] == 1):
             qp.drawText(240, 240, self.word[4])
 
-
         qp.end()
         
     def drawEllipse(self, event, qp, pen):
@@ -100,12 +98,46 @@ class HangManGUI(QWidget):
         for num in range (0, 26):
              self.buttonList.append(QPushButton(HangManGUI.alphabet[num], self))
              self.buttonList[num].move(50*(num%9), 300+ (40 * (num // 9)))
-             # self.buttonList[num].clicked.connect(self.decrementLives)
              
-    
+        # have to do this outside the loop apparently
+        self.buttonList[0].clicked.connect(lambda: self.buttonClick(0))
+        self.buttonList[1].clicked.connect(lambda: self.buttonClick(1))
+        self.buttonList[2].clicked.connect(lambda: self.buttonClick(2))
+        self.buttonList[3].clicked.connect(lambda: self.buttonClick(3))
+        self.buttonList[4].clicked.connect(lambda: self.buttonClick(4))
+        self.buttonList[5].clicked.connect(lambda: self.buttonClick(5))
+        self.buttonList[6].clicked.connect(lambda: self.buttonClick(6))
+        self.buttonList[7].clicked.connect(lambda: self.buttonClick(7))
+        self.buttonList[8].clicked.connect(lambda: self.buttonClick(8))
+        self.buttonList[9].clicked.connect(lambda: self.buttonClick(9))
+        self.buttonList[10].clicked.connect(lambda: self.buttonClick(10))
+        self.buttonList[11].clicked.connect(lambda: self.buttonClick(11))
+        self.buttonList[12].clicked.connect(lambda: self.buttonClick(12))
+        self.buttonList[13].clicked.connect(lambda: self.buttonClick(13))
+        self.buttonList[14].clicked.connect(lambda: self.buttonClick(14))
+        self.buttonList[15].clicked.connect(lambda: self.buttonClick(15))
+        self.buttonList[16].clicked.connect(lambda: self.buttonClick(16))
+        self.buttonList[17].clicked.connect(lambda: self.buttonClick(17))
+        self.buttonList[18].clicked.connect(lambda: self.buttonClick(18))
+        self.buttonList[19].clicked.connect(lambda: self.buttonClick(19))
+        self.buttonList[20].clicked.connect(lambda: self.buttonClick(20))
+        self.buttonList[21].clicked.connect(lambda: self.buttonClick(21))
+        self.buttonList[22].clicked.connect(lambda: self.buttonClick(22))
+        self.buttonList[23].clicked.connect(lambda: self.buttonClick(23))
+        self.buttonList[24].clicked.connect(lambda: self.buttonClick(24))
+        self.buttonList[25].clicked.connect(lambda: self.buttonClick(25))
+
+             
+    def buttonClick(self, num):
+
+        self.ThisGame.makeGuess(HangManGUI.alphabet[num].lower())
+        self.updateGame()
+        self.update()
+
         
     def updateGame(self):
-        self.update()
+        self.livesCount = self.ThisGame.getNumLives()
+        self.guessedLetters = self.ThisGame.getCorrectArray()
     
     def onButtonClick(self, button):
         button.setEnabled(False)
