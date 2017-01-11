@@ -22,6 +22,7 @@ class HangManGUI(QWidget):
         self.guessedLetters = self.ThisGame.getCorrectArray()
         self.word = self.ThisGame.getWord()
         self.livesCount = self.ThisGame.getNumLives()
+        self.gameState = self.ThisGame.getGameState()
 
         self.initUI()
         
@@ -89,10 +90,6 @@ class HangManGUI(QWidget):
             qp.drawText(240, 240, self.word[4])
 
         qp.end()
-        
-    def drawEllipse(self, event, qp, pen):
-        qp.setPen(pen)
-        qp.drawEllipse(60, 60, 30, 30)
     
     def generateLetterButtons(self): 
         for num in range (0, 26):
@@ -131,13 +128,16 @@ class HangManGUI(QWidget):
     def buttonClick(self, num):
 
         self.ThisGame.makeGuess(HangManGUI.alphabet[num].lower())
+        
+        # updates the game
         self.updateGame()
+        # updates the GUI
         self.update()
-
         
     def updateGame(self):
         self.livesCount = self.ThisGame.getNumLives()
         self.guessedLetters = self.ThisGame.getCorrectArray()
+        self.gameState = self.ThisGame.getGameState()
     
     def onButtonClick(self, button):
         button.setEnabled(False)

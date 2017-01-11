@@ -2,12 +2,15 @@ import random
 
 class Game(object):
 
-    word_list = ['train', 'crisp', 'tacos', 'click']
+    word_list = ['train', 'crisp', 'tacos', 'click', 'words', 'euros', 'trite', 'fluff', 'power']
 
     def __init__(self):
         self.livesLeft = 6
         self.word = Game.word_list[random.randint(0, len(Game.word_list) - 1)]
-        self.correctArray = [0, 0, 0, 0, 0]; 
+        self.correctArray = [0] * len(self.word); 
+        
+        # gameState = 0 : not over; = 1 : won; = 2 : lost;
+        self.gameState = 0;
 
     def getWord(self):
         return self.word
@@ -25,13 +28,32 @@ class Game(object):
         return self.livesLeft > 0
         
     def makeGuess(self, letter):
-        if (self.livesLeft > 0):
+        if (self.gameState == 0):
             if (self.updateCorrectArray(letter) == False):
                 self.livesLeft -= 1
+                
+        self.updateGameState()
+        
+    def getGameState(self):
+        return self.gameState
+        
+    def updateGameState(self):
+    
+        if (self.wordIsGuessed()):
+            self.gameState = 1
+        elif (self.livesLeft > 0):
+            self.gameState = 0
+        else:
+            self.gameState = 2
 
-    # Given a letter, returns a list containing the indices in the 
-    # word where that letter occurs
-    # If the letter does not occur in the word, then return the empty list
+            
+    def wordIsGuessed(self):
+        if 0 in self.correctArray:
+            return False
+        else:
+            return True
+
+    # Update the 'correct array'
     def updateCorrectArray(self, letter):
     
         isCorrectGuess = False
